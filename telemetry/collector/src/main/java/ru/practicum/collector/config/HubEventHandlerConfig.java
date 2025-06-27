@@ -27,6 +27,5 @@ public class HubEventHandlerConfig {
         hubEventHandlers.put(HubEventType.SCENARIO_REMOVED, scenarioRemovedEvent);
 
         return hubEventHandlers;
-
     }
 }
