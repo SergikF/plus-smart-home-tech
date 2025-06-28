@@ -22,12 +22,13 @@ public class SensorEventHandlerConfig {
     public Map<SensorEventType, SensorEventHandler> getSensorEventHandlers() {
         Map<SensorEventType, SensorEventHandler> sensorEventHandlers = new HashMap<>();
 
-        sensorEventHandlers.put(SensorEventType.SWITCH_SENSOR_EVENT, switchHandler);
-        sensorEventHandlers.put(SensorEventType.CLIMATE_SENSOR_EVENT, climateHandler);
-        sensorEventHandlers.put(SensorEventType.LIGHT_SENSOR_EVENT, lightHandler);
-        sensorEventHandlers.put(SensorEventType.MOTION_SENSOR_EVENT, motionHandler);
-        sensorEventHandlers.put(SensorEventType.TEMPERATURE_SENSOR_EVENT, temperatureHandler);
+        return Map.of(
+                SensorEventType.SWITCH_SENSOR_EVENT,      switchHandler,
+                SensorEventType.CLIMATE_SENSOR_EVENT,     climateHandler,
+                SensorEventType.LIGHT_SENSOR_EVENT,       lightHandler,
+                SensorEventType.MOTION_SENSOR_EVENT,      motionHandler,
+                SensorEventType.TEMPERATURE_SENSOR_EVENT, temperatureHandler
+        );
 
-        return sensorEventHandlers;
     }
 }

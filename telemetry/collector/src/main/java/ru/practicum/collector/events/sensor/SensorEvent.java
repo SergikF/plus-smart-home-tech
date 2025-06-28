@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.collector.enums.sensor.SensorEventType;
@@ -27,6 +28,7 @@ import java.time.Instant;
 })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
+@Setter
 @ToString
 public abstract class SensorEvent {
     @NotBlank

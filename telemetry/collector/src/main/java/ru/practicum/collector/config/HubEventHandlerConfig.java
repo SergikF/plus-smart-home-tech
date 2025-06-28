@@ -21,11 +21,12 @@ public class HubEventHandlerConfig {
     public Map<HubEventType, HubEventHandler> getHubEventHandlers() {
         Map<HubEventType, HubEventHandler> hubEventHandlers = new HashMap<>();
 
-        hubEventHandlers.put(HubEventType.DEVICE_ADDED, deviceAddedHandler);
-        hubEventHandlers.put(HubEventType.DEVICE_REMOVED, deviceRemovedHandler);
-        hubEventHandlers.put(HubEventType.SCENARIO_ADDED, scenarioAddedHandler);
-        hubEventHandlers.put(HubEventType.SCENARIO_REMOVED, scenarioRemovedEvent);
+        return Map.of(
+                HubEventType.DEVICE_ADDED,     deviceAddedHandler,
+                HubEventType.DEVICE_REMOVED,   deviceRemovedHandler,
+                HubEventType.SCENARIO_ADDED,   scenarioAddedHandler,
+                HubEventType.SCENARIO_REMOVED, scenarioRemovedEvent
+        );
 
-        return hubEventHandlers;
     }
 }
