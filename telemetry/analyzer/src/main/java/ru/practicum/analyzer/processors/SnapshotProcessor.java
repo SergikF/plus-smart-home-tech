@@ -18,37 +18,42 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SnapshotProcessor {
+
     private final Consumer<String, SensorsSnapshotAvro> consumer;
     private final SnapshotHandler snapshotHandler;
+
     @Value("${topic.snapshots-topic}")
     private String topic;
 
     public void start() {
+        consumer.subscribe(List.of(topic));
+
+        Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
+
         try {
-            consumer.subscribe(List.of(topic));
-
-            Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-
             while (true) {
-                ConsumerRecords<String, SensorsSnapshotAvro> records = consumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, SensorsSnapshotAvro> records =
+                        consumer.poll(Duration.ofMillis(1000));
 
                 for (ConsumerRecord<String, SensorsSnapshotAvro> record : records) {
-                    SensorsSnapshotAvro sensorsSnapshot = record.value();
-                    log.info("Получили снимок состояния умного дома: {}", sensorsSnapshot);
+                    SensorsSnapshotAvro snapshot = record.value();
+                    log.info("Получили снимок состояния умного дома: {}", snapshot);
 
-                    snapshotHandler.handleSnapshot(sensorsSnapshot);
+                    snapshotHandler.handleSnapshot(snapshot);
                 }
 
-                consumer.commitSync();
+                if (!records.isEmpty()) {
+                    consumer.commitSync();
+                }
             }
         } catch (WakeupException ignored) {
         } catch (Exception e) {
-            log.error("Ошибка чтения данных из топика {}", topic);
+            log.error("Ошибка чтения данных из топика {}", topic, e);
         } finally {
             try {
-                consumer.commitSync();
-            } finally {
                 consumer.close();
+            } catch (Exception e) {
+                log.warn("Ошибка при закрытии consumer’а", e);
             }
         }
     }

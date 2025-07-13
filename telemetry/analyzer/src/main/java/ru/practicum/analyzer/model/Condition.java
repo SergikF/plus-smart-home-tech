@@ -7,13 +7,13 @@ import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 
 @Entity
 @Table(name = "conditions")
-@SecondaryTable(name = "scenario_conditions", pkJoinColumns = @PrimaryKeyJoinColumn(name = "condition_id"))
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Condition {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,11 +26,4 @@ public class Condition {
 
     private Integer value;
 
-    @ManyToOne
-    @JoinColumn(name = "scenario_id", table = "scenario_conditions")
-    private Scenario scenario;
-
-    @ManyToOne
-    @JoinColumn(name = "sensor_id", table = "scenario_conditions")
-    private Sensor sensor;
 }
