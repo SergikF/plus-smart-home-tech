@@ -21,5 +21,5 @@ public class Action {
     private ActionTypeAvro type;
 
     private Integer value;
-}
 
+}

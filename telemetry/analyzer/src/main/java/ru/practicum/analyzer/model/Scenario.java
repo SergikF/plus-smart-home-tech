@@ -33,4 +33,3 @@ public class Scenario {
             orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ScenarioAction> actions;
 }
-
