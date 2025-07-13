@@ -4,7 +4,7 @@ import com.google.protobuf.Timestamp;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import ru.practicum.analyzer.model.Action;
+import ru.practicum.analyzer.model.ScenarioAction;
 import ru.yandex.practicum.grpc.telemetry.event.ActionTypeProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionRequest;
@@ -16,6 +16,7 @@ import java.time.Instant;
 @Slf4j
 @Service
 public class ScenarioActionProducer {
+
     private final HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterStub;
 
     public ScenarioActionProducer(
@@ -23,37 +24,40 @@ public class ScenarioActionProducer {
         this.hubRouterStub = hubRouterStub;
     }
 
-    public void sendAction(Action action) {
-        DeviceActionRequest actionRequest = mapToActionRequest(action);
+    public void sendAction(ScenarioAction scenarioAction) {
+        DeviceActionRequest actionRequest = mapToActionRequest(scenarioAction);
 
         hubRouterStub.handleDeviceAction(actionRequest);
         log.info("Действие {} отправлено в hub-router", actionRequest);
     }
 
-    private DeviceActionRequest mapToActionRequest(Action action) {
+    private DeviceActionRequest mapToActionRequest(ScenarioAction scenarioAction) {
+        var scenario   = scenarioAction.getScenario();
+        var sensor     = scenarioAction.getSensor();
+        var actionBody = scenarioAction.getAction();
+
         return DeviceActionRequest.newBuilder()
-                .setHubId(action.getScenario().getHubId())
-                .setScenarioName(action.getScenario().getName())
+                .setHubId(scenario.getHubId())
+                .setScenarioName(scenario.getName())
                 .setAction(DeviceActionProto.newBuilder()
-                        .setSensorId(action.getSensor().getId())
-                        .setType(mapActionType(action.getType()))
-                        .setValue(action.getValue())
+                        .setSensorId(sensor.getId())
+                        .setType(mapActionType(actionBody.getType()))
+                        .setValue(actionBody.getValue())
                         .build())
-                .setTimestamp(setTimestamp())
+                .setTimestamp(currentTimestamp())
                 .build();
     }
 
     private ActionTypeProto mapActionType(ActionTypeAvro actionType) {
-        log.info("мапим тип действия {}", actionType);
         return switch (actionType) {
-            case ACTIVATE -> ActionTypeProto.ACTIVATE;
+            case ACTIVATE   -> ActionTypeProto.ACTIVATE;
             case DEACTIVATE -> ActionTypeProto.DEACTIVATE;
-            case INVERSE -> ActionTypeProto.INVERSE;
-            case SET_VALUE -> ActionTypeProto.SET_VALUE;
+            case INVERSE    -> ActionTypeProto.INVERSE;
+            case SET_VALUE  -> ActionTypeProto.SET_VALUE;
         };
     }
 
-    private Timestamp setTimestamp() {
+    private Timestamp currentTimestamp() {
         Instant instant = Instant.now();
         return Timestamp.newBuilder()
                 .setSeconds(instant.getEpochSecond())

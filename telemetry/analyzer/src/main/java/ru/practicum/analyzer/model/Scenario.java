@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "scenarios")
 @AllArgsConstructor
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class Scenario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +24,13 @@ public class Scenario {
     private String hubId;
 
     private String name;
+
+    @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ScenarioCondition> conditions;
+
+    @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ScenarioAction> actions;
 }
+
