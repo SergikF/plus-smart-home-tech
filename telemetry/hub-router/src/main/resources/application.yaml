@@ -1,6 +1,6 @@
 spring:
   application:
-    name: aggregator
+    name: hub-router
   config:
     import: "configserver: "
   cloud:
