@@ -15,6 +15,7 @@ import ru.practicum.mapper.ProductMapper;
 import ru.practicum.model.Product;
 import ru.practicum.repository.ProductRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,14 +35,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductsListResponse getProductsByCategory(ProductCategory category, Pageable pageable) {
-        List<Sort.Order> orders = pageable.getSort().stream()
+        List<Sort.Order> orders = pageable.getSort().isEmpty()
+                ? Collections.emptyList()
+                : pageable.getSort().stream()
                 .map(s -> new Sort.Order(Sort.Direction.ASC, s))
                 .toList();
-        PageRequest pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize(), Sort.by(orders));
+
+        PageRequest pageRequest = orders.isEmpty()
+                ? PageRequest.of(pageable.getPage(), pageable.getSize())
+                : PageRequest.of(pageable.getPage(), pageable.getSize(), Sort.by(orders));
 
         return ProductsListResponse.builder()
-                .content(productRepository.findAllByProductCategoryAndProductState(category, ProductState.ACTIVE,
-                                pageRequest).stream()
+                .content(productRepository
+                        .findAllByProductCategoryAndProductState(
+                                category,
+                                ProductState.ACTIVE,
+                                pageRequest)
+                        .stream()
                         .map(ProductMapper::mapToDto)
                         .toList())
                 .sort(orders.stream()

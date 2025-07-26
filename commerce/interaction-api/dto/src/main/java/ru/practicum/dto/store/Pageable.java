@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -13,10 +14,8 @@ import java.util.List;
 @Setter
 public class Pageable {
     @Min(value = 0)
-    @NotNull
-    private Integer page;
+    private Integer page = 0;
     @Min(value = 1)
-    @NotNull
-    private Integer size;
-    private List<String> sort;
+    private Integer size = 1;
+    private List<String> sort = Collections.emptyList();
 }

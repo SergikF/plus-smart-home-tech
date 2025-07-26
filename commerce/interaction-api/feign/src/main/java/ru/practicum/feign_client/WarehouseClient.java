@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.dto.cart.ShoppingCartDto;
 import ru.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.practicum.dto.warehouse.AddressDto;
@@ -18,12 +17,12 @@ public interface WarehouseClient {
     @PutMapping
     void addNewProduct(@RequestBody NewProductInWarehouseRequest newProductRequest);
 
-    @PostMapping("/check" )
+    @PostMapping("/check")
     BookedProductsDto checkProductsQuantity(@RequestBody ShoppingCartDto shoppingCartDto);
 
-    @PostMapping("/add" )
+    @PostMapping("/add")
     void addProductQuantity(@RequestBody AddProductToWarehouseRequest addProductQuantity);
 
-    @GetMapping("/address" )
+    @GetMapping("/address")
     AddressDto getWarehouseAddress();
 }
