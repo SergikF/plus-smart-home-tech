@@ -8,5 +8,5 @@ public class AddressManager {
             new String[]{"ADDRESS_1", "ADDRESS_2"};
 
     public static final String CURRENT_ADDRESS =
-            ADDRESSES[Random.from(new SecureRandom()).nextInt(0, 1)];
+            ADDRESSES[Random.from(new SecureRandom()).nextInt(0, ADDRESSES.length)];
 }
