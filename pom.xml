@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <groupId>ru.yandex.practicum</groupId>
@@ -19,6 +19,10 @@
         <module>telemetry</module>
         <module>infra</module>
         <module>commerce</module>
+        <module>commerce/shopping-store</module>
+        <module>commerce/interaction-api</module>
+        <module>commerce/shopping-cart</module>
+        <module>commerce/warehouse</module>
     </modules>
 
     <properties>
@@ -89,7 +93,6 @@
                 <version>${grpc.version}</version>
             </dependency>
 
-            <!--    / GRPC dependencies management        -->
         </dependencies>
     </dependencyManagement>
 
