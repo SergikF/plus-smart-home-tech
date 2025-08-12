@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
         List<Sort.Order> orders = pageable.getSort().isEmpty()
                 ? Collections.emptyList()
                 : pageable.getSort().stream()
-                .map(s -> new Sort.Order(Sort.Direction.ASC, s))
+                .map(s -> new Sort.Order(Sort.Direction.fromString(pageable.getDirection()), s))
                 .toList();
 
         PageRequest pageRequest = orders.isEmpty()
